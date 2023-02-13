@@ -19,7 +19,7 @@ contract MKNToken is ERC20Burnable, Ownable, ERC20Capped {
     }
 
     function _mint(address account, uint256 amount) internal virtual override (ERC20, ERC20Capped) {
-        super._mint(account, amount);
+        ERC20Capped._mint(account, amount);
     }
 
 }
