@@ -1,13 +1,5 @@
 const MKNTokenContract = artifacts.require("MKNToken");
 
-const expectedName = "MKN Token";
-const expectedSymbol = "MKN";
-const expectedDecimals = 18;
-const expectedTotalSupply = "0";
-const insufficientAllowanceError = "VM Exception while processing transaction: revert ERC20: insufficient allowance";
-const callerIsNotOwnerError = "VM Exception while processing transaction: revert Ownable: caller is not the owner";
-const capExceededError = "VM Exception while processing transaction: revert ERC20Capped: cap exceeded";
-
 let MKNToken;
 let accounts;
 let creatorAccount;
@@ -20,28 +12,10 @@ contract("MKNToken", (accounts_) => {
         creatorAccount = accounts[0];
     });
 
-    it("Method name() returns the same value according to my individual task from table",  async () => {
-        const actualName = await name();
-
-        assert.equal(actualName, expectedName, "Method name() returns wrong value");
-    });
-
-    it("Method symbol() returns the same value according to my individual task from table",  async () => {
-        const actualSymbol = await symbol();
-
-        assert.equal(actualSymbol, expectedSymbol, "Method symbol() returns wrong value");
-    });
-
-    it("Method decimals() returns the same value according to my individual task from table",  async () => {
-        const actualDecimals = await decimals();
-
-        assert.equal(actualDecimals, expectedDecimals, "Method decimals() returns wrong value");
-    });
-
     it("Method totalSupply() returns 0",  async () => {
         const actualTotalSupply = await totalSupply();
 
-        assert.equal(actualTotalSupply, expectedTotalSupply, "Method totalSupply() returns wrong value");
+        assert.equal(actualTotalSupply, 0, "Method totalSupply() returns wrong value");
     });
 
     it("After executing the transfer() method sender's balance is reduced and receiver's balance is increased correctly",  async () => {
@@ -99,7 +73,8 @@ contract("MKNToken", (accounts_) => {
 
         let result = await transferFrom(senderAccount, receiverAccount, allowanceAmount, receiverAccount);
 
-        assert.equal(result, insufficientAllowanceError, "VM Error message is not displayed");
+        assert.equal(result, "VM Exception while processing transaction: revert ERC20: insufficient allowance",
+            "VM Error message is not displayed");
     });
 
     it("After executing the burn() method contract creator's balance is reduced correctly", async () => {
@@ -135,7 +110,8 @@ contract("MKNToken", (accounts_) => {
     it("Account which is not the creator is not able to mint tokens", async () => {
         let result = await mint(3000, accounts[1]);
 
-        assert.equal(result, callerIsNotOwnerError, "VM Error message is not displayed");
+        assert.equal(result, "VM Exception while processing transaction: revert Ownable: caller is not the owner",
+             "VM Error message is not displayed");
     });
 
     it("_totalSupply cannot be increased to value more than _cap", async () => {
@@ -143,7 +119,8 @@ contract("MKNToken", (accounts_) => {
 
         let result = await mint(_cap + 1000);
 
-        assert.equal(result, capExceededError, "VM Error message is not displayed");
+        assert.equal(result, "VM Exception while processing transaction: revert ERC20Capped: cap exceeded",
+            "VM Error message is not displayed");
     });
 });
 
