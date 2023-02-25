@@ -124,18 +124,6 @@ contract("MKNToken", (accounts_) => {
     });
 });
 
-async function name() {
-    return await MKNToken.name();
-}
-
-async function symbol() {
-    return await MKNToken.symbol();
-}
-
-async function decimals() {
-    return await MKNToken.decimals();
-}
-
 async function totalSupply() {
     return String(await MKNToken.totalSupply());
 }
